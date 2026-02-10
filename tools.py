@@ -55,3 +55,8 @@ tools_schema = [
         },
     },
 ]
+
+available_functions = {
+    "get_planet_mass": get_planet_mass,
+    "calculate": calculate
+}
