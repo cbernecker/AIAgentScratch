@@ -23,8 +23,11 @@ class Agent():
     # Structured Plan-and-Execute Agent
     def run(self, user_prompt: str, tools: list):
         '''This functions is the orchestrator'''
+        print(f"\n--- STEP 1 PLAN TASKS---")
         action_plan = self.__plan_tasks(user_prompt)
+        print(f"\n--- STEP 2 EXECUTE TASKS ---")
         execution_results = self.__plan_tools(action_plan, tools)
+        print(f"\n--- STEP 3 CREATE ANSWER ---")
         final_answer = self.__synthesize_answer(user_prompt, execution_results)
         return final_answer
     
@@ -116,6 +119,7 @@ class Agent():
                 response["result"] = result # Add Result to the task. 
                 logger.info(f"Result of {func_name}: {result}")
             execution_results.append(response)
+        logger.info(f"******************Execution Results: {task} *******************")
         logger.info(f'The execution result are: {execution_results}')
         return execution_results
     
@@ -137,7 +141,7 @@ user_prompt = "What is the combine mass of Earth and jupiter" #"Write a one-sent
 if os.environ.get("OPENAI_API_KEY"):
     my_Agent = Agent(available_functions) # create Agent
     response = my_Agent.run(user_prompt, tools_schema)
-    logger.info(f"Output: \n {response}.")
+    logger.info(f"Output: {response}.")
 else:
     print("No OPENAI_API_KEY is set. You can find your API key at https://platform.openai.com/account/api-keys.")
 
