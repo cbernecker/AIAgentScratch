@@ -128,6 +128,8 @@ class Agent():
             "You are a helpful assistant. You have been given a user question"
             "and a set of execution results from various tools. "
             "Your goal is to provide a final, concise answer based on these results."
+            "Check if the task of the user is fullfilled."
+            "If not let him know that you don't have the tools to fullfill the tasks"
         )
         
         # We combine the history into a single 'context' string for the LLM
@@ -136,7 +138,8 @@ class Agent():
 
 
 system_prompt = "You are a usefull assistant"
-user_prompt = "What is the combine mass of Earth and jupiter" #"Write a one-sentence bedtime story about a unicorn."
+user_prompt = "What is the combine mass of Earth and jupiter"
+# Try: "Please book me a flight from Munich to London on 22.02.2026 and book my a hotel close to the city center with a gym."
 
 if os.environ.get("OPENAI_API_KEY"):
     my_Agent = Agent(available_functions) # create Agent
