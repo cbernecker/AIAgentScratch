@@ -3,7 +3,7 @@ import openai
 import logging
 import json
 import os
-from tools import tools_schema, available_functions
+from tools import tools_schema, tools
 
 client = OpenAI()
 
@@ -96,7 +96,7 @@ class Agent():
             " - 'id: int #unique id to identify the task "
             " - 'task': {task}"
             " - 'function': string # name of the tool"
-            " - 'properties: list # properties to execute the function"
+            " - 'properties: dict # properties to execute the function"
             " - 'dependencies': list # id's if the needed results of other tasks"
         )
         for task in action_plan["tasks"]:
@@ -115,7 +115,7 @@ class Agent():
             if func_name in self.available_tools_dict:
                 logger.info(f"Execute Function {func_name} with {kwargs}...")
                 function_to_call = self.available_tools_dict[func_name]
-                result = function_to_call(*kwargs) 
+                result = function_to_call(kwargs) 
                 response["result"] = result # Add Result to the task. 
                 logger.info(f"Result of {func_name}: {result}")
             execution_results.append(response)
@@ -142,7 +142,7 @@ user_prompt = "What is the combine mass of Earth and jupiter"
 # Try: "Please book me a flight from Munich to London on 22.02.2026 and book my a hotel close to the city center with a gym."
 
 if os.environ.get("OPENAI_API_KEY"):
-    my_Agent = Agent(available_functions) # create Agent
+    my_Agent = Agent(tools) # create Agent
     response = my_Agent.run(user_prompt, tools_schema)
     logger.info(f"Output: {response}.")
 else:

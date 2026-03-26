@@ -1,7 +1,11 @@
+import json
+
 def get_planet_mass(planet):
     # Ensure we are working with a string and cleaning it up
     if isinstance(planet, dict):
         planet = planet.get("planet", "")
+    else:
+        raise ValueError("Type doesnt' match please provide a dictionary with planet as key and planetname as value. Like {'planet': 'Earth'}")
 
     planet = str(planet).lower().strip()
 
@@ -12,10 +16,21 @@ def get_planet_mass(planet):
     }
     return masses.get(planet, "Unknown planet.")
     
-def calculate(number1, number2):
+def calculate(numbers):
     # #A risky tool in production, but perfect for a demo!
-    a = number1["number1"] 
-    b = number2["number2"] 
+    #print(number1)
+    #print(number2)
+    #a = number1["number1"] 
+    #b = number2["number2"] 
+    if isinstance(numbers, dict):
+        a = numbers.get("number1", "")
+        b = numbers.get("number2", "")
+    else:
+        raise ValueError('Type does not match please provide a dictionary like {"number1": 2, "number2":3}')
+
+
+    #a = float(numbers["number1"])
+    #b = float(numbers["number2"])
     return a + b
 
 # Define a list of callable tools for the model
@@ -51,12 +66,12 @@ tools_schema = [
                     "description": "The second number",
                 },
             },
-            "required": ["number1", "number2"],
+            "required": ["numbers"],
         },
     },
 ]
 
-available_functions = {
+tools = {
     "get_planet_mass": get_planet_mass,
     "calculate": calculate
 }
