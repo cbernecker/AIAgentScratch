@@ -4,27 +4,31 @@ from tools import  tools, tools_schema
 import json
 client = OpenAI()
 
-system_prompt = """
+#- get_planet_mass("planet", "planet_name": dict): Returns the mass of a given planet..
+# - calculate("number1", "number2": dict): Evaluates a math expression.
+
+system_prompt = f'''
 You are a dynamic AI Agent. You work in a continuous 
 loop of 
 - Thought, 
 - Action, 
 - Observation.
+- PAUSE
 
 Your available tools are:
-- get_planet_mass("planet", "planet_name": dict): Returns the mass of a given planet..
-- calculate("number1", "number2": dict): Evaluates a math expression.
+{tools_schema}
+
 
 Use the following format exactly:
 Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of [get_planet_mass, calculate]
 Action Input: the input to the action
-
+PAUSE
 (You will then receive an Observation from the environment)
 Thought: I now know the answer
 Final Answer: the final answer to the original input question
-"""
+'''
 
 class Agent():
     def __init__(self, system_prompt, available_tools_dict):
@@ -35,14 +39,14 @@ class Agent():
     # The Reasoning 
     @staticmethod #function never needs to access data stored inside the class
     def call_llm(messages: list,
-                 model: str = "gpt-4.1-nano", 
-                 temperature: float = 0.7,
+                 model: str = "gpt-4.1-nano", # "gpt-4.1-nano", 
+                 #temperature: float = 0.7,
                  json_output: bool = False):
         
 
             response = client.responses.create(
                 model=model,
-                temperature=temperature,
+                #temperature=temperature,
                 input=messages
             )
             
